@@ -14,8 +14,8 @@ int main()
 {
     printf("Inicia el programa\n");
 
-    float vectorA[nDatos]={1.2, 3.3, 4.5, 8.4, 5.4};
-    float vectorB[nDatos]={5.2, 6.3, 7.5, 5.4, 6.4};
+volatile    float vectorA[nDatos]={1.2, 3.3, 4.5, 8.4, 5.4};
+volatile    float vectorB[nDatos]={5.2, 6.3, 7.5, 5.4, 6.4};
     float resultado=0;
 
     for (int i=0;i<nDatos;i++){
