@@ -5,16 +5,35 @@
 
 #include "mbed.h"
 
-#define WAIT_TIME_MS 500 
-DigitalOut led1(LED1);
+#define nDatos 5
+#define WAIT_TIME_MS 1000
+
+float multiplicaDatos(float a, float b);
 
 int main()
 {
-    printf("This is the bare metal blinky example running on Mbed OS %d.%d.%d.\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
+    printf("Inicia el programa\n");
 
+    float vectorA[nDatos]={1.2, 3.3, 4.5, 8.4, 5.4};
+    float vectorB[nDatos]={5.2, 6.3, 7.5, 5.4, 6.4};
+    float resultado=0;
+
+    for (int i=0;i<nDatos;i++){
+        float datoA=vectorA[i];
+        float datoB=vectorB[i];
+        resultado+=multiplicaDatos(datoA,datoB);
+        
+    }
+    
+    printf("El resultado es %f\n",resultado);
+    printf("Programa finalizado\n");
     while (true)
     {
-        led1 = !led1;
         thread_sleep_for(WAIT_TIME_MS);
     }
+}
+
+float multiplicaDatos(float a, float b){
+    return a*b;
+    
 }
