@@ -1,39 +1,75 @@
-/* mbed Microcontroller Library
- * Copyright (c) 2019 ARM Limited
- * SPDX-License-Identifier: Apache-2.0
- */
-
 #include "mbed.h"
-
-#define nDatos 5
-#define WAIT_TIME_MS 1000
-
-float multiplicaDatos(float a, float b);
-
+#include "datos.h"
+#include "math.h"
+ 
+#define longitudTrama 500
+ 
+Timer timer;
+float resultado;
+int tiempo;
+ 
+struct estructuraMedidas 
+{ 
+   float vrms; 
+   float irms;  
+   float potenciaActiva; 
+   float potenciaReactiva;  
+   float potenciaAparente;  
+   float energiaConsumida;
+   float factorDePotencia;
+};
+ 
+float calcularRMS(int16_t *datos, int longitud);
+ 
+void calcularDatos(int16_t *datosV, int16_t *datosI, int longitud, estructuraMedidas *medidas);
+ 
+ 
 int main()
 {
-    printf("Inicia el programa\n");
-
-volatile    float vectorA[nDatos]={1.2, 3.3, 4.5, 8.4, 5.4};
-volatile    float vectorB[nDatos]={5.2, 6.3, 7.5, 5.4, 6.4};
-    float resultado=0;
-
-    for (int i=0;i<nDatos;i++){
-        float datoA=vectorA[i];
-        float datoB=vectorB[i];
-        resultado+=multiplicaDatos(datoA,datoB);
-        
-    }
+ 
+    timer.reset();
+    timer.start();
+    resultado=calcularRMS(datos, longitudTrama);
+    timer.stop();
+    printf("\n****El valor Vrms es %f calculado en %d us ****\n\n",resultado,timer.read_us());
     
-    printf("El resultado es %f\n",resultado);
-    printf("Programa finalizado\n");
-    while (true)
-    {
-        thread_sleep_for(WAIT_TIME_MS);
+    estructuraMedidas medidas;
+    medidas.energiaConsumida=0;
+    
+    timer.reset();
+    timer.start();
+    calcularDatos(datosV,datosI,longitudTrama,&medidas);
+    timer.stop();
+    printf("**** Datos calculados en %d us ****\n",timer.read_us());
+    printf("**** El valor Vrms es %f ****\n",medidas.vrms);
+    printf("**** El valor Irms es %f ****\n",medidas.irms);
+    printf("**** La potencia activa es %f ****\n",medidas.potenciaActiva);
+    printf("**** La potencia reactiva es %f ****\n",medidas.potenciaReactiva);
+    printf("**** La potencia aparente es %f ****\n",medidas.potenciaAparente);
+    printf("**** La energia consumida es %f ****\n",medidas.energiaConsumida);
+    printf("**** El factor de potencia es es %f ****\n",medidas.factorDePotencia);
+
+    while(true){}
+}
+ 
+float calcularRMS(int16_t *datos, int longitud)
+{
+    float rms=0;
+    float datoV;
+    for (int i=0;i<longitud;i++){
+        datoV=datos[i]/32768*3.3;
+        rms+=datoV*datoV;
+
     }
+    rms=sqrt(rms/longitud);
+    return rms;
 }
 
-float multiplicaDatos(float a, float b){
-    return a*b;
+
+
+ 
+void calcularDatos(int16_t *datosV, int16_t *datosI, int longitud, estructuraMedidas *medidas)
+{
     
-}
+}  
+
