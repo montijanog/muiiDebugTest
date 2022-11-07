@@ -19,4 +19,6 @@ Lo que la función tiene que devolver es el valor Vrms de la señal en Voltios.
 
 La ecuación para calcular la tensión eficaz es la siguiente:
 
-![](https://latex.codecogs.com/svg.image?V_{rms}=\sqrt{\frac{1}{N}\sum_{0}^{N-1}\left|&space;v\left&space;(&space;n&space;\right&space;)\right|^{2}})
+
+![](https://latex.codecogs.com/png.image?\inline&space;\dpi{110}{\color{white}&space;V_{rms}=\sqrt{\frac{1}{N}\sum_{0}^{N-1}\left|&space;v\left&space;(&space;n&space;\right&space;)\right|^{2}}{\color{Yellow}&space;}})
+
