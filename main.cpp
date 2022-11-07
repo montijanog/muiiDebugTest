@@ -4,17 +4,72 @@
  */
 
 #include "mbed.h"
-
-#define WAIT_TIME_MS 500 
-DigitalOut led1(LED1);
-
+#include "datos.h"
+#include "math.h"
+ 
+#define longitudTrama 500
+ 
+Timer timer;
+float resultado;
+int tiempo;
+ 
+struct estructuraMedidas 
+{ 
+   float vrms; 
+   float irms;  
+   float potenciaActiva; 
+   float potenciaReactiva;  
+   float potenciaAparente;  
+   float energiaConsumida;
+   float factorDePotencia;
+};
+ 
+float calcularRMS(int16_t *datos, int longitud);
+ 
+void calcularDatos(int16_t *datosV, int16_t *datosI, int longitud, estructuraMedidas *medidas);
+ 
+ 
 int main()
 {
-    printf("This is the bare metal blinky example running on Mbed OS %d.%d.%d.\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
-
-    while (true)
-    {
-        led1 = !led1;
-        thread_sleep_for(WAIT_TIME_MS);
-    }
+ 
+    timer.reset();
+    timer.start();
+    resultado=calcularRMS(datos, longitudTrama);
+    timer.stop();
+    printf("****El valor Vrms es %f calculado en %d us ****\n",resultado,timer.read_us());
+    
+    estructuraMedidas medidas;
+    medidas.energiaConsumida=0;
+    
+    timer.reset();
+    timer.start();
+    calcularDatos(datosV,datosI,longitudTrama,&medidas);
+    timer.stop();
+    printf("**** Datos calculados en %d us ****\n",timer.read_us());
+    printf("**** El valor Vrms es %f ****\n",medidas.vrms);
+    printf("**** El valor Irms es %f ****\n",medidas.irms);
+    printf("**** La potencia activa es %f ****\n",medidas.potenciaActiva);
+    printf("**** La potencia reactiva es %f ****\n",medidas.potenciaReactiva);
+    printf("**** La potencia aparente es %f ****\n",medidas.potenciaAparente);
+    printf("**** La energia consumida es %f ****\n",medidas.energiaConsumida);
+    printf("**** El factor de potencia es es %f ****\n",medidas.factorDePotencia);
+    
+    while(true){}
 }
+ 
+float calcularRMS(int16_t *datos, int longitud)
+{
+    float rms=0;
+    float datoV;
+    for (int i=0;i<longitud;i++){
+        datoV=datos[i]/32768.0*3.3;
+        rms+=datoV*datoV;
+    }
+    rms=sqrt(rms/longitud);
+    return rms;
+}
+ 
+void calcularDatos(int16_t *datosV, int16_t *datosI, int longitud, estructuraMedidas *medidas)
+{
+    
+}  
