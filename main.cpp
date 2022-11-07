@@ -36,7 +36,7 @@ int main()
     timer.start();
     resultado=calcularRMS(datos, longitudTrama);
     timer.stop();
-    printf("****El valor Vrms es %f calculado en %d us ****\n",resultado,timer.read_us());
+    printf("\n****El valor Vrms es %f calculado en %d us ****\n\n",resultado,timer.read_us());
     
     estructuraMedidas medidas;
     medidas.energiaConsumida=0;
@@ -53,7 +53,7 @@ int main()
     printf("**** La potencia aparente es %f ****\n",medidas.potenciaAparente);
     printf("**** La energia consumida es %f ****\n",medidas.energiaConsumida);
     printf("**** El factor de potencia es es %f ****\n",medidas.factorDePotencia);
-    
+
     while(true){}
 }
  
@@ -62,7 +62,7 @@ float calcularRMS(int16_t *datos, int longitud)
     float rms=0;
     float datoV;
     for (int i=0;i<longitud;i++){
-        datoV=datos[i]/32768.0*3.3;
+        datoV=datos[i]/32768*3.3;
         rms+=datoV*datoV;
     }
     rms=sqrt(rms/longitud);
