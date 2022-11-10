@@ -8,9 +8,9 @@ El programa consta de dos apartados, en cada uno de ellos habrá que introducir 
 
 En este ejercicio hay que modificar el código que se encuentra en la función calcularRMS, la función tiene esta definición:
 
-'''
+```
     float calcularRMS(int16_t *datos, int longitud)
-'''
+```
 
 La función recibe un puntero a un array de datos en formato enteros con signo de 16 bits de anchura de palabra.
 Los datos que contiene el array provienen de un ADC de 16bits que muestrea una señal comprendida entre -3.3V y 3.3V
@@ -33,6 +33,6 @@ La señal de tensión proviene de un ADC de 16bits siendo las tensiones de refer
 La señal de corriente proviene de un ADC de 16 bits que mide corrientes entre -1A y 1A
 Los parámetros que se calculen hay que dejarlos en los campos de la estructura que se pase en la función
 
-'''
+```
     void calcularDatos(int16_t *datosV, int16_t *datosI, int longitud, estructuraMedidas *medidas)
-'''
+```
