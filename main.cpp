@@ -56,18 +56,64 @@ int main()
  //Esta función calcula el valor RMS
 float calcularRMS(int16_t *datos, int longitud)
 {
-    float rms=0;
-    float datoV;
-    for (int i=0;i<longitud;i++){
-        datoV=datos[i];
-        rms+=datoV*datoV;
+    float rms;
+    float num = 32768.0*3.3;
+    float mile = 0.00000001;
+    int i=0;
+    int a=100;
+    int b=200;
+    int c=300;
+    int d=400;
+    
+    //float datoV;
+    for (i && a && b && c && d;i<100 && a<200 && b<300 && c<400 && d<longitud;i++,a++,b++,c++,d++){
+        //datoV=datos[i];
+        rms+=((datos[i]*datos[i])+(datos[a]*datos[a])+(datos[b]*datos[b])+(datos[c]*datos[c])+(datos[d]*datos[d]));
     }
-    rms=sqrt(rms/longitud/32768.0*3.3/32768.0*3.3);
+    rms=sqrt(rms*mile/longitud*num/num);
     return rms;
 }
  
 void calcularDatos(int16_t *datosV, int16_t *datosI, int longitud, estructuraMedidas *medidas)
 {
+    int16_t voltajes;
+    int32_t product_volt;
+    int64_t sumatorio_volt=0;
+    float resultado_v;
+    int16_t intens;
+    int32_t product_i;
+    int64_t sumatorio_i=0;
+    float resultado_i;
+    int32_t pot;
+    int64_t sumatorio_pot=0;
+    float resultado_pot;
+    float cte=6.6/65536.0*6.6/65536.0;
+ 
+    for (int n=0;n<longitud;n++){
+            
+            voltajes=datosV[n];
+            product_volt=voltajes*voltajes;
+            sumatorio_volt+=product_volt;
+            
+            intens=datosI[n];
+            product_i=intens*intens;
+            sumatorio_i+=product_i;
+            
+            pot=voltajes*intens;
+            sumatorio_pot+=pot;
+            
+        }
+        resultado_v=sumatorio_volt*cte/longitud;
+        resultado_i=sumatorio_i*cte/longitud;
+        resultado_pot=sumatorio_pot*cte/longitud;
     
-}  
+    (*medidas).vrms=sqrt(resultado_v);    
+    (*medidas).irms=sqrt(resultado_i);
+    (*medidas).potenciaActiva=resultado_pot;
+    (*medidas).potenciaAparente=(*medidas).vrms*(*medidas).irms;
+    (*medidas).potenciaReactiva=sqrt(-((*medidas).potenciaActiva*(*medidas).potenciaActiva)+((*medidas).potenciaAparente*(*medidas).potenciaAparente));
+    (*medidas).factorDePotencia=(*medidas).potenciaActiva/(*medidas).potenciaAparente;
+ 
+}
+ 
 
